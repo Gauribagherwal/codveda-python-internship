@@ -50,4 +50,4 @@ In the future, the calculator can be improved by adding:
 - Scientific calculations
 - Percentage calculations
 - Calculation history
-- Graphical user interface
+- Graphical user interfacegit add .
