@@ -1,0 +1,2 @@
+This is a secret file.
+This file is created for encryption and decryption testing.
