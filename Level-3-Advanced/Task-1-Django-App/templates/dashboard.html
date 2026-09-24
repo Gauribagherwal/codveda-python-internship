@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Manager Dashboard</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            margin: 0;
+        }
+
+        .navbar {
+            background: #333;
+            color: white;
+            padding: 18px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar h2 {
+            margin: 0;
+        }
+
+        .logout-form {
+            margin: 0;
+        }
+
+        .logout-btn {
+            background: white;
+            color: #333;
+            border: none;
+            padding: 9px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .logout-btn:hover {
+            background: #ddd;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .top-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .welcome {
+            margin: 0;
+        }
+
+        .add-btn {
+            background: #333;
+            color: white;
+            padding: 10px 16px;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+
+        .add-btn:hover {
+            background: #555;
+        }
+
+        .task {
+            border: 1px solid #ddd;
+            padding: 18px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+        }
+
+        .task h3 {
+            margin: 0 0 10px 0;
+        }
+
+        .task p {
+            margin: 8px 0;
+        }
+
+        .status {
+            font-weight: bold;
+        }
+
+        .actions {
+            margin-top: 15px;
+        }
+
+        .actions a {
+            text-decoration: none;
+            margin-right: 15px;
+        }
+
+        .edit {
+            color: #0066cc;
+        }
+
+        .delete {
+            color: #cc0000;
+        }
+
+        .empty {
+            text-align: center;
+            color: #666;
+            padding: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navigation Bar -->
+    <div class="navbar">
+
+        <h2>Task Manager</h2>
+<form method="post" action="{% url 'user_logout' %}" class="logout-form">Ctrl + C
+            {% csrf_token %}
+            <button type="submit" class="logout-btn">
+                Logout
+            </button>
+        </form>
+
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+
+        <div class="top-section">
+
+            <h1 class="welcome">
+                Welcome, {{ user.username }}!
+            </h1>
+
+            <a href="{% url 'add_task' %}" class="add-btn">
+                + Add Task
+            </a>
+
+        </div>
+
+        <h2>My Tasks</h2>
+
+        {% if tasks %}
+
+            {% for task in tasks %}
+
+                <div class="task">
+
+                    <h3>{{ task.title }}</h3>
+
+                    {% if task.description %}
+                        <p>
+                            <strong>Description:</strong>
+                            {{ task.description }}
+                        </p>
+                    {% else %}
+                        <p>
+                            <strong>Description:</strong>
+                            No description provided.
+                        </p>
+                    {% endif %}
+
+                    <p>
+                        <strong>Status:</strong>
+                        <span class="status">
+                            {{ task.get_status_display }}
+                        </span>
+                    </p>
+
+                    <p>
+                        <strong>Created:</strong>
+                        {{ task.created_at|date:"d M Y, H:i" }}
+                    </p>
+
+                    <div class="actions">
+
+                        <a
+                            href="{% url 'edit_task' task.id %}"
+                            class="edit"
+                        >
+                            Edit
+                        </a>
+
+                        <a
+                            href="{% url 'delete_task' task.id %}"
+                            class="delete"
+                        >
+                            Delete
+                        </a>
+
+                    </div>
+
+                </div>
+
+            {% endfor %}
+
+        {% else %}
+
+            <div class="empty">
+                <p>No tasks available.</p>
+                <p>Click "Add Task" to create your first task.</p>
+            </div>
+
+        {% endif %}
+
+    </div>
+
+</body>
+</html>
